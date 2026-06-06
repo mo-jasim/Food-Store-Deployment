@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: auth-container
-          image: mojasim/mernspace-c-auth-service
+          image: mojasim/mernspace-c-auth-service:latest
           ports:
             - containerPort: 5501
           volumeMounts:
