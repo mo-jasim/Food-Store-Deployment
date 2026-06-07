@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: order-container
-          image: codersgyan/mernspace-c-order-service:build-8
+          image: mojasim/mernspace-c-order-service:latest
           ports:
             - containerPort: 5503
           volumeMounts:
@@ -40,5 +40,3 @@ spec:
     - protocol: TCP
       port: 5503
       targetPort: 5503
-
-
