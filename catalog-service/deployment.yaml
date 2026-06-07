@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: catalog-container
-          image: codersgyan/mernspace-c-catalog-service:build-1
+          image: mojasim/mernspace-c-catalog-service:latest
           ports:
             - containerPort: 5502
           volumeMounts:
@@ -40,5 +40,3 @@ spec:
     - protocol: TCP
       port: 5502
       targetPort: 5502
-
-

@@ -21,4 +21,3 @@ spec:
               name: catalog-service
               port:
                 number: 5502
-
