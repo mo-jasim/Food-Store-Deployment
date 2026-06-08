@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ws-container
-          image: codersgyan/mernspace-c-ws-service:build-9
+          image: mojasim/mernspace-c-ws-service:latest
           ports:
             - containerPort: 5504
           volumeMounts:
@@ -40,5 +40,3 @@ spec:
     - protocol: TCP
       port: 5504
       targetPort: 5504
-
-

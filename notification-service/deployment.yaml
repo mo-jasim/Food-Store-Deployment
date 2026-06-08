@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: notification-container
-          image: codersgyan/mernspace-c-notification-service:build-2
+          image: mojasim/mernspace-c-notification-service:latest
           ports:
             - containerPort: 5505
           volumeMounts:
