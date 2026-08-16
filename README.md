@@ -34,13 +34,13 @@ A production-grade, microservices-based food ordering platform deployed on AWS E
 
 | Service | Description | Tech Stack | Repository |
 | :--- | :--- | :--- | :--- |
-| **Auth Service** | User authentication, RBAC, tenant management, and asymmetric JWKS token issuing | Node.js, Express, TypeScript, PostgreSQL (TypeORM) | [auth-service](https://github.com/mo-jasim/auth-service) |
-| **Catalog Service** | Product & pricing catalog, categories, toppings, and asset management | Node.js, Express, TypeScript, MongoDB (Mongoose), AWS S3 | [catalog-service](https://github.com/mo-jasim/catalog-service) |
-| **Order Service** | Order placement, state machine workflows, and payment handling | Node.js, Express, TypeScript, MongoDB (Mongoose), Stripe API | [order-service](https://github.com/mo-jasim/order-service) |
-| **Notification Service** | Event-driven customer transactional notifications and emails | Node.js, TypeScript, Apache Kafka, Nodemailer | [notification-service](https://github.com/mo-jasim/notification-service) |
-| **WebSocket Service** | Real-time order tracking and live status updates | Node.js, TypeScript, Socket.IO, Apache Kafka | [websocket-service](https://github.com/mo-jasim/websocket-service) |
-| **Client Frontend** | Customer web application for browsing menus and ordering | Next.js 14 (App Router), React, TypeScript, Tailwind CSS | [client-frontend](https://github.com/mo-jasim/client-frontend) |
-| **Admin Dashboard** | Restaurant operations and catalog management portal | React 18, Vite, TypeScript, Ant Design, Zustand | [admin-dashboard](https://github.com/mo-jasim/admin-dashboard) |
+| **Auth Service** | User authentication, RBAC, tenant management, and asymmetric JWKS token issuing | Node.js, Express, TypeScript, PostgreSQL (TypeORM) | [auth-service](https://github.com/mo-jasim/Food-store-auth-service) |
+| **Catalog Service** | Product & pricing catalog, categories, toppings, and asset management | Node.js, Express, TypeScript, MongoDB (Mongoose), AWS S3 | [catalog-service](https://github.com/mo-jasim/Food-Store-Catalog-Service) |
+| **Order Service** | Order placement, state machine workflows, and payment handling | Node.js, Express, TypeScript, MongoDB (Mongoose), Stripe API | [order-service](https://github.com/mo-jasim/Food-Store-Order-Service) |
+| **Notification Service** | Event-driven customer transactional notifications and emails | Node.js, TypeScript, Apache Kafka, Nodemailer | [notification-service](https://github.com/mo-jasim/Food-Store-Notification-Service) |
+| **WebSocket Service** | Real-time order tracking and live status updates | Node.js, TypeScript, Socket.IO, Apache Kafka | [websocket-service](https://github.com/mo-jasim/Food-Store-WS-Service) |
+| **Client Frontend** | Customer web application for browsing menus and ordering | Next.js 14 (App Router), React, TypeScript, Tailwind CSS | [client-frontend](https://github.com/mo-jasim/Food-Store-Client-UI) |
+| **Admin Dashboard** | Restaurant operations and catalog management portal | React 18, Vite, TypeScript, Ant Design, Zustand | [admin-dashboard](https://github.com/mo-jasim/Food-Store-Admin-UI) |
 
 ---
 
