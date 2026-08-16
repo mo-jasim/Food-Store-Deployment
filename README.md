@@ -1,108 +1,46 @@
-# Food-Store-Deployment
+# Cloud Deployment Platform
 
-This folder contains the Kubernetes deployment manifests and Terraform used to create the EKS cluster, install the ingress controller, and install Argo CD.
+<div align="center">
+  
+![Client UI](https://cdn.mojasim.com/1781412849530-Pizza-Client.jpeg)
 
-## What gets created
+</div>
 
-- EKS cluster and managed node group
-- VPC and subnets for Kubernetes workloads
-- NGINX ingress controller for app ingress
-- Argo CD exposed through nginx ingress
-- Service deployment manifests for auth, catalog, order, and ws services
+<div align="center">
 
-## Prerequisites
+![Admin UI](https://cdn.mojasim.com/1781412864271-Pizza-Admin.png)
 
-Make sure you have:
+</div>
 
-- AWS CLI configured with credentials
-- Terraform installed
-- kubectl installed
-- Access to the target AWS account and region
+<div align="center">
 
-## Temporary Argo CD hostname
+![Architecture Diagram](https://cdn.mojasim.com/1786892864572-pizza-app-diagram.png)
 
-Use a temporary hostname until your real domain is ready:
+</div>
 
-- `argocd.local.pizzaria.store`
+## Architecture & Service Breakdown
 
-When your real domain is available later, update:
+### Service Flow & Communication
+External traffic is captured by an AWS Application Load Balancer (ALB) and routed to a Kubernetes Ingress controller. The Ingress controller acts as the cluster's gateway, proxying requests to the appropriate microservices based on path definitions. Once inside the cluster, microservices communicate with one another over the internal cluster network.
 
-- `terraform/variables.tf`
-- `terraform/terraform.tfvars`
+### Microservices Directory
+- [Auth Service](https://github.com/your-username/auth-service)
+- [Catalog Service](https://github.com/your-username/catalog-service)
+- [Client Frontend](https://github.com/your-username/client-frontend)
+- [Notification Service](https://github.com/your-username/notification-service)
+- [Order Service](https://github.com/your-username/order-service)
+- [WebSocket / Real-time Service](https://github.com/your-username/websocket-service)
 
-Then re-run Terraform.
+### External Dependencies & Datastores
+- **Databases:** PostgreSQL (Core Data), Redis (Caching)
+- **Message Brokers:** Kafka (Asynchronous Event Streaming)
+- **Integrations:** Stripe (Payments)
 
-## Terraform workflow
+## Infrastructure & Deployment
 
-From the Terraform folder:
+The infrastructure is provisioned using **Terraform**, managing the underlying networking and the **AWS EKS** cluster. 
 
-```bash
-cd /Users/mo-jasim/Desktop/DevOps/pizza-app/Food-Store-Deployment/terraform
-terraform init
-terraform plan -out=tfplan
-terraform apply tfplan
-```
-
-If you want to destroy the cluster later:
-
-```bash
-terraform destroy
-```
-
-## Kubernetes access
-
-After Terraform finishes, update kubeconfig:
-
-```bash
-aws eks update-kubeconfig --name pizza-app-eks --region ap-south-1
-```
-
-Verify the cluster:
-
-```bash
-kubectl cluster-info
-kubectl get nodes
-```
-
-## Check Argo CD and ingress controller
-
-```bash
-kubectl get pods -n ingress-nginx
-kubectl get svc -n ingress-nginx
-kubectl get pods -n argocd
-kubectl get svc -n argocd
-```
-
-## Access Argo CD locally
-
-Use port-forward:
-
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:80
-```
-
-Then open:
-
-```bash
-http://localhost:8080
-```
-
-## Get the Argo CD admin password
-
-```bash
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
-```
-
-## Deploy application manifests
-
-```bash
-kubectl apply -f /Users/mo-jasim/Desktop/DevOps/pizza-app/Food-Store-Deployment/auth-service/
-kubectl apply -f /Users/mo-jasim/Desktop/DevOps/pizza-app/Food-Store-Deployment/catalog-service/
-kubectl apply -f /Users/mo-jasim/Desktop/DevOps/pizza-app/Food-Store-Deployment/order-service/
-```
-
-## Notes
-
-- Terraform state files should not be committed.
-- The root `.gitignore` already excludes `.terraform/`, `*.tfstate`, and `.terraform.lock.hcl`.
-- If you later switch Argo CD to the real `pizzaria.store` domain, only update the hostname variables and apply Terraform again.
+**CI/CD Flow:**
+- **Push & Build:** Code pushed to the repository triggers the CI pipeline, which runs tests and builds new Docker images.
+- **Publish:** Images are tagged and pushed to a container registry.
+- **Rollout:** The CD pipeline updates the Kubernetes manifests and applies them to the EKS cluster, initiating a rolling deployment for the updated services.
