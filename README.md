@@ -1,7 +1,7 @@
-# Cloud Deployment Platform
+# Cloud-Native Food Ordering & Delivery Platform
 
 <div align="center">
-  
+
 ![Client UI](https://cdn.mojasim.com/1781412849530-Pizza-Client.jpeg)
 
 </div>
@@ -18,29 +18,41 @@
 
 </div>
 
-## Architecture & Service Breakdown
+## Architecture & System Overview
 
-### Service Flow & Communication
-External traffic is captured by an AWS Application Load Balancer (ALB) and routed to a Kubernetes Ingress controller. The Ingress controller acts as the cluster's gateway, proxying requests to the appropriate microservices based on path definitions. Once inside the cluster, microservices communicate with one another over the internal cluster network.
+### Traffic Flow & Networking
+1. **Edge & Load Balancing:** Incoming HTTPS traffic reaches an **AWS Network Load Balancer (NLB)** configured with **AWS Certificate Manager (ACM)** for TLS termination and cross-zone load balancing.
+2. **Ingress Routing:** Decrypted traffic forwards to the **NGINX Ingress Controller** (`ingress-nginx`) running inside the AWS EKS cluster. The controller handles host/path-based routing, CORS policies, and WebSocket protocol connection upgrades.
+3. **Internal Microservices:** Traffic routes across private subnets to internal ClusterIP services. Microservices communicate with datastores and publish/consume events over the private cluster network.
 
 ### Microservices Directory
-- [Auth Service](https://github.com/your-username/auth-service)
-- [Catalog Service](https://github.com/your-username/catalog-service)
-- [Client Frontend](https://github.com/your-username/client-frontend)
-- [Notification Service](https://github.com/your-username/notification-service)
-- [Order Service](https://github.com/your-username/order-service)
-- [WebSocket / Real-time Service](https://github.com/your-username/websocket-service)
 
-### External Dependencies & Datastores
-- **Databases:** PostgreSQL (Core Data), Redis (Caching)
-- **Message Brokers:** Kafka (Asynchronous Event Streaming)
-- **Integrations:** Stripe (Payments)
+| Service | Description | Tech Stack | Repository |
+| :--- | :--- | :--- | :--- |
+| **Auth Service** | User authentication, RBAC, tenant management, and asymmetric JWKS token issuing | Node.js, Express, TypeScript, PostgreSQL (TypeORM) | [auth-service](https://github.com/mo-jasim/auth-service) |
+| **Catalog Service** | Product & pricing catalog, categories, toppings, and asset management | Node.js, Express, TypeScript, MongoDB (Mongoose), AWS S3 | [catalog-service](https://github.com/mo-jasim/catalog-service) |
+| **Order Service** | Order placement, state machine workflows, and payment handling | Node.js, Express, TypeScript, MongoDB (Mongoose), Stripe API | [order-service](https://github.com/mo-jasim/order-service) |
+| **Notification Service** | Event-driven customer transactional notifications and emails | Node.js, TypeScript, Apache Kafka, Nodemailer | [notification-service](https://github.com/mo-jasim/notification-service) |
+| **WebSocket Service** | Real-time order tracking and live status updates | Node.js, TypeScript, Socket.IO, Apache Kafka | [websocket-service](https://github.com/mo-jasim/websocket-service) |
+| **Client Frontend** | Customer web application for browsing menus and ordering | Next.js 14 (App Router), React, TypeScript, Tailwind CSS | [client-frontend](https://github.com/mo-jasim/client-frontend) |
+| **Admin Dashboard** | Restaurant operations and catalog management portal | React 18, Vite, TypeScript, Ant Design, Zustand | [admin-dashboard](https://github.com/mo-jasim/admin-dashboard) |
 
-## Infrastructure & Deployment
+### Datastores & External Services
+- **PostgreSQL:** Relational database for user credentials, tenant hierarchies, and permission mappings.
+- **MongoDB:** Document database powering product catalogs, customizable toppings, and order state history.
+- **Apache Kafka:** Distributed event streaming platform connecting Catalog, Order, Notification, and WebSocket services for asynchronous, non-blocking workflows.
+- **AWS S3:** Object storage for catalog product images.
+- **Stripe API:** Payment processing and webhook lifecycle management.
 
-The infrastructure is provisioned using **Terraform**, managing the underlying networking and the **AWS EKS** cluster. 
+## Infrastructure & GitOps Deployment
 
-**CI/CD Flow:**
-- **Push & Build:** Code pushed to the repository triggers the CI pipeline, which runs tests and builds new Docker images.
-- **Publish:** Images are tagged and pushed to a container registry.
-- **Rollout:** The CD pipeline updates the Kubernetes manifests and applies them to the EKS cluster, initiating a rolling deployment for the updated services.
+### Infrastructure as Code (Terraform)
+The AWS cloud environment is automated through modular **Terraform** scripts:
+- **AWS VPC:** Custom VPC with public, private, and intra subnets across multiple availability zones.
+- **AWS EKS:** Managed Kubernetes cluster (v1.35) with managed node groups, EBS CSI Driver via IRSA (IAM Roles for Service Accounts), and EKS Pod Identity.
+- **Platform Tooling:** Ingress-NGINX and Argo CD provisioned directly via Helm provider integrations.
+
+### CI/CD & Deployment Flow
+- **Continuous Integration:** Pushes to the `main` branch trigger GitHub Actions workflows to run linters, execute tests, build multi-architecture Docker containers, and publish them to Docker Hub.
+- **GitOps Continuous Delivery:** **Argo CD** monitors the repository and automatically synchronizes application manifests to the AWS EKS cluster.
+- **Zero-Downtime Rollouts:** Kubernetes Deployments execute rolling updates with active health checks (`readinessProbe` and `livenessProbe`) to maintain uninterrupted service availability.
