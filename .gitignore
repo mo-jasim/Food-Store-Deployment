@@ -11,3 +11,16 @@ override.tf.json
 *_override.tf.json
 .terraform.lock.hcl
 terraform.tfstate.backup
+
+### Kubernetes Secrets & Environment Files
+*-secret.yaml
+*-secret.yml
+*-private-key.yaml
+*-private-key.yml
+*.env*
+*.pem
+*.key
+
+# Do not ignore template/example files
+!*.example.yaml
+!*.example.yml

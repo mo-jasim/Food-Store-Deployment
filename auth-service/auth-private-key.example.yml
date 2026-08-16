@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auth-private-key
+type: Opaque
+stringData:
+  private.pem: |
+    -----BEGIN RSA PRIVATE KEY-----
+    YOUR_PRIVATE_KEY_CONTENT_HERE
+    -----END RSA PRIVATE KEY-----
