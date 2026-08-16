@@ -1,31 +1,36 @@
 # Cloud-Native Food Ordering & Delivery Platform
 
-<div align="center">
+A production-grade, microservices-based food ordering platform deployed on AWS EKS with Terraform, Ingress-NGINX, Apache Kafka, and GitOps via Argo CD.
 
-![Client UI](https://cdn.mojasim.com/1781412849530-Pizza-Client.jpeg)
+---
 
-</div>
-
-<div align="center">
-
-![Admin UI](https://cdn.mojasim.com/1781412864271-Pizza-Admin.png)
-
-</div>
+## Architecture Overview
 
 <div align="center">
 
-![Architecture Diagram](https://cdn.mojasim.com/1786892864572-pizza-app-diagram.png)
+![Architecture Diagram](https://cdn.mojasim.com/1786893633239-Food-app-architechture.png)
+
+*End-to-end cloud infrastructure and microservices communication topology on AWS*
 
 </div>
-
-## Architecture & System Overview
 
 ### Traffic Flow & Networking
 1. **Edge & Load Balancing:** Incoming HTTPS traffic reaches an **AWS Network Load Balancer (NLB)** configured with **AWS Certificate Manager (ACM)** for TLS termination and cross-zone load balancing.
 2. **Ingress Routing:** Decrypted traffic forwards to the **NGINX Ingress Controller** (`ingress-nginx`) running inside the AWS EKS cluster. The controller handles host/path-based routing, CORS policies, and WebSocket protocol connection upgrades.
 3. **Internal Microservices:** Traffic routes across private subnets to internal ClusterIP services. Microservices communicate with datastores and publish/consume events over the private cluster network.
 
-### Microservices Directory
+---
+
+## Application Previews
+
+| Customer Web Portal | Restaurant Admin Dashboard |
+| :---: | :---: |
+| ![Client UI](https://cdn.mojasim.com/1781412849530-Pizza-Client.jpeg) | ![Admin UI](https://cdn.mojasim.com/1781412864271-Pizza-Admin.png) |
+| **Next.js 14 Client App**<br>Menu browsing, basket customization, and order tracking | **React & Vite Admin Dashboard**<br>Menu cataloging, tenant configuration, and order fulfillment |
+
+---
+
+## Microservices Directory
 
 | Service | Description | Tech Stack | Repository |
 | :--- | :--- | :--- | :--- |
@@ -37,12 +42,16 @@
 | **Client Frontend** | Customer web application for browsing menus and ordering | Next.js 14 (App Router), React, TypeScript, Tailwind CSS | [client-frontend](https://github.com/mo-jasim/client-frontend) |
 | **Admin Dashboard** | Restaurant operations and catalog management portal | React 18, Vite, TypeScript, Ant Design, Zustand | [admin-dashboard](https://github.com/mo-jasim/admin-dashboard) |
 
-### Datastores & External Services
+---
+
+## Datastores & External Services
 - **PostgreSQL:** Relational database for user credentials, tenant hierarchies, and permission mappings.
 - **MongoDB:** Document database powering product catalogs, customizable toppings, and order state history.
 - **Apache Kafka:** Distributed event streaming platform connecting Catalog, Order, Notification, and WebSocket services for asynchronous, non-blocking workflows.
 - **AWS S3:** Object storage for catalog product images.
 - **Stripe API:** Payment processing and webhook lifecycle management.
+
+---
 
 ## Infrastructure & GitOps Deployment
 
